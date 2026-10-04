@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapVid - 万能视频下载，一个链接就够了</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">⚡ SnapVid</div>
+    <div class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#platforms">支持平台</a>
+      <a href="#faq">常见问题</a>
+      <a class="vip-link" href="#" onclick="showVip();return false;">👑 升级 VIP</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1>万能视频下载，<span class="hl">一个链接</span>就够了</h1>
+  <p class="sub">支持 1000+ 平台 · 高清画质 · 免安装 · 手机电脑都能用</p>
+  <div class="parse-bar">
+    <input id="urlInput" type="text" placeholder="粘贴视频链接或整段分享文案（如抖音分享），自动识别链接" autocomplete="off">
+    <button id="parseBtn" onclick="doParse()">解析</button>
+  </div>
+  <div class="platform-tags" id="platforms">
+    <span>哔哩哔哩</span><span>抖音</span><span>YouTube</span><span>X / Twitter</span>
+    <span>TikTok</span><span>微博</span><span>小红书</span><span class="more">等 1000+ 站点</span>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- 解析结果区 -->
+  <section id="resultArea" class="hidden">
+    <div class="video-card" id="videoCard"></div>
+    <div class="progress-area hidden" id="progressArea">
+      <div class="progress-info">
+        <span id="progressText">准备下载…</span>
+        <span id="progressMeta"></span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </section>
+
+  <!-- 播放列表结果 -->
+  <section id="playlistArea" class="hidden">
+    <h2 class="section-title" id="playlistTitle"></h2>
+    <div class="playlist-grid" id="playlistGrid"></div>
+  </section>
+
+  <!-- 功能卡片 -->
+  <section id="features">
+    <h2 class="section-title">为什么选择 SnapVid？</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="fi">🌐</div><h3>全平台支持</h3>
+        <p>依托开源引擎 yt-dlp，覆盖 1000+ 视频站点，粘贴链接即可解析</p>
+      </div>
+      <div class="feature-card">
+        <div class="fi">🎬</div><h3>高清画质 <em class="vip-badge">VIP</em></h3>
+        <p>免费畅享 720P，VIP 解锁 1080P / 4K 原画画质</p>
+      </div>
+      <div class="feature-card">
+        <div class="fi">📦</div><h3>批量下载 <em class="vip-badge">VIP</em></h3>
+        <p>合集、播放列表一键打包，排队自动下载</p>
+      </div>
+      <div class="feature-card">
+        <div class="fi">🧠</div><h3>视频总结 <em class="soon-badge">即将上线</em></h3>
+        <p>AI 自动生成视频摘要与字幕翻译，学习更高效</p>
+      </div>
+      <div class="feature-card">
+        <div class="fi">📱</div><h3>手机可用</h3>
+        <p>响应式设计，手机浏览器直接下载到本地，无需安装 App</p>
+      </div>
+      <div class="feature-card">
+        <div class="fi">🔒</div><h3>隐私安全</h3>
+        <p>服务器不留存任何视频文件，下载完成即刻删除</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 class="section-title">常见问题</h2>
+    <div class="faq-list">
+      <details><summary>支持哪些平台？</summary><p>依托开源项目 yt-dlp，支持哔哩哔哩、抖音、YouTube、X (Twitter)、TikTok、微博等 1000+ 站点。App 里复制的整段分享文案可直接粘贴，自动识别其中的链接。</p></details>
+      <details><summary>为什么有的平台解析失败？</summary><p>部分平台有风控（如抖音需要 fresh cookies）。管理员在服务器项目根目录放入 cookies.txt 即可解锁；过期后用 tools/refresh_cookies.py 一键刷新。</p></details>
+      <details><summary>直接下载和中转下载有什么区别？</summary><p>直接下载走平台 CDN 直链，速度快不占本站带宽，但部分平台有防盗链会失败；中转下载由服务器代下再传给你，更稳定。</p></details>
+      <details><summary>下载的视频保存在哪里？</summary><p>保存在你的浏览器默认下载目录。本站服务器不保存任何文件。</p></details>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>⚠️ 本站仅供学习与技术研究使用，下载内容请在 24 小时内删除。请尊重原创版权，勿用于商业用途或侵犯他人权益。</p>
+  <p class="dim">Powered by yt-dlp · SnapVid © 2026</p>
+</footer>
+
+<!-- VIP 弹窗 -->
+<div class="modal-mask hidden" id="vipModal" onclick="if(event.target===this)hideVip()">
+  <div class="modal">
+    <h2>👑 升级 SnapVid VIP</h2>
+    <ul class="vip-perks">
+      <li>✅ 解锁 1080P / 4K 超清画质</li>
+      <li>✅ 批量下载 · 合集一键打包</li>
+      <li>✅ 不限每日次数</li>
+      <li>✅ 优先体验 AI 视频总结、字幕翻译</li>
+    </ul>
+    <div class="price-row">
+      <div class="price-card"><div class="p-name">月度</div><div class="p-val">¥9.9</div></div>
+      <div class="price-card hot"><div class="p-name">年度</div><div class="p-val">¥59</div><div class="p-tag">省 50%</div></div>
+      <div class="price-card"><div class="p-name">永久</div><div class="p-val">¥129</div></div>
+    </div>
+    <button class="btn-primary" onclick="alert('支付能力即将接入，敬请期待！')">立即开通</button>
+    <button class="btn-ghost" onclick="hideVip()">再想想</button>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>

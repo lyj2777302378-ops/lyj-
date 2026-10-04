@@ -1,0 +1,11 @@
+# 敏感信息：平台 cookies，绝不能入库
+cookies.txt
+
+# 运行时生成
+downloads/
+__pycache__/
+*.pyc
+
+# 本地环境
+.venv/
+*.log
